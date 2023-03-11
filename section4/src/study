@@ -1,0 +1,169 @@
+## 자바스크립트와 타입스크립트
+
+### let / const
+
+#### const : 변경할 수 없는 변수
+
+새로운 값을 할당하려고 하면 그 값이 정확한 타입이어도 에러 발생(상수이기 때문에)
+
+- 자바스크립트 : 실행시 브라우저에서 에러 발생
+- 타입스크립트 : 코드 작성 중 에러 발생
+
+#### let : 변경 가능한 변수
+
+var 과 변수를 사용할 수 있는 유효 범위가 다름
+
+```js
+function add(a: number, b: number) {
+  let result;
+  result = a + b;
+  return result;
+}
+```
+
+해당 result 는 함수 내에서만 유효함
+(함수 밖에 작성하면 전역적으로 유효하게 됨)
+
+```js
+if (age > 20) {
+  var isOld = true;
+}
+console.log(isOld);
+// 타입스크립트에선 에러 발생 O
+// 자바스크립트에선 에러 발생 X
+```
+
+var : 전역 유효 범위와 함수의 유효 범위만 지님
+재선언이 가능함
+let : 블록 범위 {} 를 추가로 지님
+재선언이 불가능함
+
+```js
+var a = 'abc';
+if (10 > 4) {
+  var a = 'cba';
+}
+console.log(a); // 'cba'
+```
+
+```js
+let b = 'abc';
+if (10 > 4) {
+  let b = 'cba';
+}
+console.log(b); // 'abc'
+```
+
+### 화살표형 함수
+
+```js
+const add = (a: number, b: number = 5) => a + b;
+const printOutput = (output: string | number) => console.log(output);
+const printOutput = (output) => console.log(putput); // 타입스크립트에서 에러 발생
+const printOutput2: (output: string | number) => void = (output) =>
+  console.log(output); // 다른 위치에 타입 배정이 입력되어있다면 해당 정보가 타입스크립트로 전달, 사용 가능.
+```
+
+인수를 감싼 괄호 쌍은 인수가 하나일 경우 생략 가능
+하지만 인수에 주어진 타입 배정은 생략 불가
+
+```js
+const button = document.querySelector('button');
+if (button) {
+  button.addEventListener('click', (event) => console.log(event));
+}
+```
+
+좀 더 짧고 간결하게 함수 지정이 가능
+
+### 기본값 함수 매개변수
+
+```js
+const add = (a: number, b: number = 5) => a + b;
+add(5);
+```
+
+인수에 기본값을 설정, 이 경우 하나의 인수만으로 함수 호출 가능
+\*\* 기본값 인수는 기본값을 설정하지 않은 인수보다 앞에 올 수 없음
+
+### 스프레드 연산자
+
+```js
+const hobbies = ['Sports', 'Cooking'];
+const activeHobbies = ['Hiking'];
+hobbies.push(activeHobbies)
+// activeHobbies는 string[] 타입이므로, string 타입을 요소로 가지는 hobbies에 push할 수 없음(오류 발생)
+hobbies.push(activeHobbies[0], activeHobbies[1], ...)
+hobbies.push(...activeHobbies)
+
+const person = {
+  name :'ABC',
+  age:20,
+}
+const copiedPerson = {...person}
+```
+
+배열이나 객체의 요소를 추출하는데 사용
+
+### 나머지 매개변수
+
+```js
+const add = (a:number, b:number, ...) => {};
+console.log(add(5, 1, 2, 5, 10));
+
+const add = (...numbers:number[])=>{
+  numbers.reduce((curResult, curValue)=>{
+    return curResult+curValue;
+  },0)
+}
+console.log(add(5, 1, 2, 5, 10))
+```
+
+값을 여러개 입력해야 하는 경우 나머지 매개변수를 사용
+나머지 매개변수는 함수 내 배열로 병합되어 들어옴
+
+여러 인수를 지원할 때 지원할 인수의 수를 알고 있는 경우 튜플과 병합하여 사용 가능
+
+```js
+const add = (...numbers: [number, number, number]) => {
+  numbers.reduce((curResult, curValue) => {
+    return curResult + curValue;
+  }, 0);
+};
+console.log(add(1, 2, 3));
+```
+
+### 배열 및 객체 비구조화 할당
+
+배열이나 객체에서 요소를 추출하는 것
+
+```js
+const hobbies = ['Sports', 'Cooking', 'Watching', 'Swimming'];
+const [hobby1, hobby2, ...remainingHobbies] = hobbies;
+```
+
+등호 왼쪽에 변수, 오른쪽에 구조 분해하려는 배열 입력
+구조 분해는 원래의 배열을 바꾸지 않음
+
+```js
+const person = {
+  name: 'abc',
+  age: 30,
+};
+const { age, name } = person;
+console.log(age); // 30
+console.log(name); //'abc'
+```
+
+객체에 입력된 속성 이름을 사용해야 해당 키의 값이 객체에서 추출되어 상수나 변수에 저장됨
+객체의 경우 키 이름으로 요소를 추출
+이름을 달리 저장하고 싶을 때는 쌍점을 사용.
+```js
+const person = {
+  name: 'abc',
+  age: 30,
+};
+const {name:personName, age} = person;
+console.log(personName) // 'abc'
+console.log(name) // 지정되지 않은 변수이므로 오류 발생(자바스크립트에선 ''로 표시)
+```
