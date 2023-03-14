@@ -99,3 +99,4 @@ function createCourseGoal(
 const names: Readonly<string[]> = ['Max', 'Anna'];
 // names.push('Manu');
 // names.pop();
+

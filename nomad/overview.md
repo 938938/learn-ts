@@ -165,6 +165,33 @@ const add : Add = (a,b)=>{
 }
 ```
 
-
-
 다형성(polymorphism)
+
+
+
+
+
+
+** 타입과 인터페이스는 비슷하지만 타입이 조금 더 활용성이 높음
+```ts
+type Team = 'Red' | 'Blue' | 'Yellow'
+type Health = 1 | 5 | 10
+// 인터페이스로는 이러한 지정을 할 수 없음
+```
+인터페이스보다 타입을 사용하는 경우가 많음
+
+```ts
+type User = {
+  name:string
+}
+type Player = User & {} // and
+const abc : Player = {
+  name:'abc'
+}
+```
+인터페이스는 객체 지향 프로그래밍의 개념을 활용해 디자인
+타입은 더 유연함
+
+인터페이스를 상속할 때 private로 만들 수 없음
+
+
