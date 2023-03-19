@@ -195,3 +195,36 @@ const abc : Player = {
 인터페이스를 상속할 때 private로 만들 수 없음
 
 
+## 4.5 polymorphism
+다형성 : 다른 모양의 코드를 가질 수 있게 해주는 것
+제네릭 사용(placeholder 타입 사용할 수 있게 해줌)
+
+```ts
+interface SStorage<T> {
+  [key: string]: T;
+}
+class LocalStorage<T> {
+  private storage: SStorage<T> = {};
+  set(key: string, value: T) {
+    this.storage[key] = value;
+  }
+  remove(key: string) {
+    delete this.storage[key];
+  }
+  get(key: string): T {
+    return this.storage[key];
+  }
+  clear() {
+    this.storage = {};
+  }
+}
+
+const stringsStorage = new LocalStorage<string>();
+stringsStorage.get('cat');
+stringsStorage.set('hello', 'world');
+
+const booleanStorage = new LocalStorage<boolean>();
+booleanStorage.get('abc');
+booleanStorage.set('hello', true);
+```
+

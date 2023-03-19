@@ -1,20 +1,16 @@
 # 제네릭 타입
+
 ## 내장 제네릭 & 제네릭이란?
-
-제네릭 타입을 사용해서 타입스크립트에게 정보를 줄 수 있음
-제네릭 타입은 하나의 타입 인수가 필요함
-제네릭 타입을 사용하면 보다 나은 타입 안전성을 확보할 수 있음
-타입 안전성과 결합된 유연성을 제공
-전달하는 값이나 클래스에서 사용하는 값을 유연하게 저장 가능
-
-다른 여러가지 가능한 타입과 함께 작동하는 타입을 사용하는 경우
-(다른 타입의 데이터를 내보내는 객체 등)
 
 제네릭 : 타입을 함수의 파라미터처럼 사용하는 것
 
-제네릭 타입
-타입의 첫글자인 T를 사용하는 것이 일반적(다른 문자를 사용해도 괜찮음)
-관례상 한글자 사용
+- 타입의 첫글자인 T를 사용하는 것이 일반적이며, 관례상 한글자
+
+제네릭 타입을 사용해서 타입스크립트에게 정보 제공 가능
+
+타입 안전성과 결합된 유연성을 제공
+전달하는 값이나 클래스에서 사용하는 값을 유연하게 저장 가능
+다른 여러가지 가능한 타입과 함께 작동하는 타입을 사용하는 경우(다른 타입의 데이터를 내보내는 객체 등) 사용
 
 ```ts
 function merge(objA:object, objB:object)[
@@ -36,7 +32,9 @@ console.log(mergedObj);
 ```
 
 ## 제약조건 작업하기
+
 그냥 제네릭 타입만 설정하면 어느 타입이라도 될 수 있기 때문에, 특정 타입을 설정하고자 할 땐 제약 조건 작업
+
 ```ts
 function merge<T extends object, U extends object>(objA: T, objB: U) {
   return Object.assign(objA, objB);
@@ -74,6 +72,7 @@ function extractAndConvert<T extends object, U extends keyof T>(
 
 extractAndConvert({ name: 'Max' }, 'name');
 ```
+
 타입 스크립트에게 해당 정보가 있는지 알려주기 위해 사용
 keyof 키워드를 지니는 제네릭 타입을 사용, 정확한 구조를 갖고자 함을 타입스크립트에 전달 가능
 
@@ -107,12 +106,15 @@ console.log(textStorage.getItems());
 
 const numberStorage = new DataStorage<number>();
 ```
+
 원시값이 아닌 요소로는 indexof 가 작동을 하지 않음
 원시값과만 작업하도록 제네릭 타입 설정
 타입 안전성 보장
 
 ## 제네릭 유틸리티 타입
+
 제네릭 타입을 사용하는 내장 타입, 특정 유틸리티 기능을 제공하는 제네릭 타입
+
 ```ts
 interface CourseGoal {
   title: string;
@@ -132,6 +134,7 @@ function createCourseGoal(
   return courseGoal as CourseGoal;
 }
 ```
+
 Partial 타입 : 타입이나 인터페이스의 모든 속성을 선택적인 객체 타입으로 변경
 타입 전체의 모든 속성이 선택적인 타입으로 변경
 
@@ -140,8 +143,20 @@ const names: Readonly<string[]> = ['Max', 'Anna'];
 // names.push('Manu');
 // names.pop();
 ```
+
 Readonly 타입 : 타입이나 인터페이스의 모든 속성에 readonly 속성 부여
 
 유틸리티 타입은 타입스크립트에만 존재, 다른 언어로 컴파일할 수 없음
 
 ## 제네릭 타입 vs 유니언 타입
+
+둘 다 여러 타입을 동시에 다룬다는 공통점이 있음
+다만 유니온 타입은 공통된 메소드의 타입만 추적해줄 수 있고, 받은 값을 그대로 리턴할 경우 해당 타입이 아니라 유니온 타입으로 지정되는 문제가 있음
+
+```ts
+function returnValue(value: string | number) {
+  return value;
+}
+const a = returnValue('a');
+a.split(''); // string 타입이라 확신할 수 없으므로 오류 발생
+```
