@@ -6,7 +6,7 @@ const TodoItem: React.FC<{
   text: string;
   onRemoveTodo: () => void;
 }> = (props) => {
-  const todosCtx = useContext(TodosContext)
+  const todosCtx = useContext(TodosContext);
   return (
     <li className={classes.item} onClick={props.onRemoveTodo}>
       {props.text}
